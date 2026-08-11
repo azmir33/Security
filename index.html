@@ -226,34 +226,25 @@
 
         // Built-in Web Audio API Synthesizer (No external sound files required)
         function startAlarmSound() {
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                sirenOsc = audioCtx.createOscillator();
-                sirenGain = audioCtx.createGain();
+    const audio = document.getElementById("alarmAudio");
 
-                sirenOsc.type = 'sawtooth';
-                sirenOsc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                
-                // Beeping alarm effect
-                sirenGain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    audio.currentTime = 0;
 
-                sirenOsc.connect(sirenGain);
-                sirenGain.connect(audioCtx.destination);
-                sirenOsc.start();
-                isSirenRunning = true;
+    audio.play().catch(error => {
+        console.log("Audio play failed:", error);
+    });
 
-                // Alternate frequency to create a police/alarm siren effect
-                let high = false;
-                setInterval(() => {
-                    if (isSirenRunning && audioCtx) {
-                        sirenOsc.frequency.setValueAtTime(high ? 600 : 950, audioCtx.currentTime);
-                        high = !high;
-                    }
-                }, 200);
-            } catch (e) {
-                console.log("Audio not supported or blocked");
-            }
-        }
+    isSirenRunning = true;
+}
+
+function stopAlarmSound() {
+    isSirenRunning = false;
+
+    const audio = document.getElementById("alarmAudio");
+
+    audio.pause();
+    audio.currentTime = 0;
+}
 
         function stopAlarmSound() {
             isSirenRunning = false;
