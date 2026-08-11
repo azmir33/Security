@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRITICAL SYSTEM WARNING</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@700;900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #050508;
+            color: #00ff66;
+            font-family: 'Share Tech Mono', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Scanline Overlay Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 10;
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 520px;
+            background: rgba(12, 16, 20, 0.95);
+            border: 2px solid #ff003c;
+            box-shadow: 0 0 25px rgba(255, 0, 60, 0.4), inset 0 0 15px rgba(255, 0, 60, 0.2);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Initial Start Overlay */
+        #start-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(5, 5, 8, 0.98);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            z-index: 20;
+            padding: 20px;
+        }
+
+        .alert-icon {
+            font-size: 55px;
+            color: #ff003c;
+            animation: pulse 0.8s infinite alternate;
+            margin-bottom: 10px;
+        }
+
+        .warning-title {
+            color: #ff003c;
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #ff003c;
+            margin-bottom: 15px;
+        }
+
+        .sub-text {
+            color: #a0a0a0;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* Buttons */
+        .btn {
+            background: #ff003c;
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.6);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #ff2a55;
+            box-shadow: 0 0 25px rgba(255, 0, 60, 0.9);
+        }
+
+        /* Progress Bar */
+        .progress-box {
+            width: 100%;
+            height: 26px;
+            background: #111;
+            border: 1px solid #00ff66;
+            border-radius: 4px;
+            margin: 20px 0 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+        }
+
+        .bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00ff66, #ff003c);
+            transition: width 0.1s linear;
+        }
+
+        .terminal-log {
+            font-size: 13px;
+            color: #ff3355;
+            height: 20px;
+            margin-top: 10px;
+            text-shadow: 0 0 5px #ff003c;
+        }
+
+        /* Prank Reveal Screen */
+        #prank-screen {
+            display: none;
+            font-family: 'Outfit', sans-serif;
+            text-align: center;
+        }
+
+        #prank-screen h1 {
+            font-size: 48px;
+            color: #ffffff;
+            text-shadow: 0 0 20px #00ff66;
+            margin-bottom: 10px;
+        }
+
+        #prank-screen p {
+            color: #cccccc;
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        .safe-badge {
+            display: inline-block;
+            background: rgba(0, 255, 102, 0.15);
+            border: 2px solid #00ff66;
+            color: #00ff66;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            background: #00ff66;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.6);
+        }
+
+        .retry-btn:hover {
+            background: #33ff88;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.9);
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); opacity: 1; }
+            to { transform: scale(1.15); opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Overlay requiring click to enable Web Audio -->
+        <div id="start-overlay">
+            <div class="alert-icon">⚠</div>
+            <div class="warning-title">SYSTEM THREAT DETECTED</div>
+            <p class="sub-text">Critical vulnerability found in local memory space.</p>
+            <button class="btn" onclick="initPrank()">RESOLVE THREAT</button>
+        </div>
+
+        <!-- Fake Hack Screen -->
+        <div id="fake-screen">
+            <div class="warning-title">VIRUS SCAN IN PROGRESS</div>
+            <p style="color: #aaa; font-size: 14px;">Do not close this browser window...</p>
+            
+            <div class="progress-box">
+                <div class="bar" id="bar"></div>
+            </div>
+            
+            <p style="font-size: 20px;" id="percent">0%</p>
+            <div class="terminal-log" id="status">Initializing emergency sweep...</div>
+        </div>
+
+        <!-- Final Reveal Screen -->
+        <div id="prank-screen">
+            <h1>😂 GOT YOU! 😂</h1>
+            <div class="safe-badge">✓ YOUR PHONE IS 100% SAFE</div>
+            <p>Relax, this was just a harmless prank web page!</p>
+            <button class="btn retry-btn" onclick="location.reload()">PRANK SOMEONE ELSE 😈</button>
+        </div>
+    </div>
+
+    <script>
+        let audioCtx;
+        let sirenOsc, sirenGain;
+        let isSirenRunning = false;
+
+        // Built-in Web Audio API Synthesizer (No external sound files required)
+        function startAlarmSound() {
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                sirenOsc = audioCtx.createOscillator();
+                sirenGain = audioCtx.createGain();
+
+                sirenOsc.type = 'sawtooth';
+                sirenOsc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                
+                // Beeping alarm effect
+                sirenGain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+
+                sirenOsc.connect(sirenGain);
+                sirenGain.connect(audioCtx.destination);
+                sirenOsc.start();
+                isSirenRunning = true;
+
+                // Alternate frequency to create a police/alarm siren effect
+                let high = false;
+                setInterval(() => {
+                    if (isSirenRunning && audioCtx) {
+                        sirenOsc.frequency.setValueAtTime(high ? 600 : 950, audioCtx.currentTime);
+                        high = !high;
+                    }
+                }, 200);
+            } catch (e) {
+                console.log("Audio not supported or blocked");
+            }
+        }
+
+        function stopAlarmSound() {
+            isSirenRunning = false;
+            if (sirenOsc) {
+                sirenOsc.stop();
+                sirenOsc.disconnect();
+            }
+        }
+
+        function playVictorySound() {
+            if (!audioCtx) return;
+            // Play a cheerful chord sequence on prank reveal
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            notes.forEach((freq, index) => {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + (index * 0.1));
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime + (index * 0.1));
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (index * 0.1) + 0.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(audioCtx.currentTime + (index * 0.1));
+                osc.stop(audioCtx.currentTime + (index * 0.1) + 0.4);
+            });
+        }
+
+        function initPrank() {
+            document.getElementById('start-overlay').style.display = 'none';
+            startAlarmSound();
+
+            let progress = 0;
+            const bar = document.getElementById("bar");
+            const percent = document.getElementById("percent");
+            const status = document.getElementById("status");
+
+            const logs = [
+                { p: 15, text: "CRITICAL: Trojan.Android.Agent detected!" },
+                { p: 35, text: "WARN: Extracting personal photos & contacts..." },
+                { p: 60, text: "ALERT: Remote IP connection established..." },
+                { p: 85, text: "ERROR: System partition corrupted!" },
+                { p: 98, text: "FINALIZING SYSTEM LOCKOUT..." }
+            ];
+
+            let timer = setInterval(() => {
+                progress++;
+                bar.style.width = progress + "%";
+                percent.innerText = progress + "%";
+
+                let currentLog = logs.find(l => l.p === progress);
+                if (currentLog) {
+                    status.innerText = currentLog.text;
+                }
+
+                if (progress >= 100) {
+                    clearInterval(timer);
+                    stopAlarmSound();
+                    
+                    setTimeout(() => {
+                        playVictorySound();
+                        document.getElementById("fake-screen").style.display = "none";
+                        document.getElementById("prank-screen").style.display = "block";
+                        document.querySelector(".container").style.borderColor = "#00ff66";
+                        document.querySelector(".container").style.boxShadow = "0 0 25px rgba(0, 255, 102, 0.4)";
+                    }, 500);
+                }
+            }, 70); // Full scan duration ~7 seconds
+        }
+    </script>
+</body>
+</html>
